@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Virtual Realitet O'yini</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- A-Frame -->
+  <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+  <!-- O'yin stilini o'zgartirish uchun CSS -->
+  <style>
+    .game-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 text-center">
+        <h1 class="mb-4">Virtual Realitet O'yini</h1>
+        <div class="game-container">
+          <!-- Virtual dunyo (bu yerda qora asman) -->
+          <a-scene background="color: #000">
+            <!-- Kamera -->
+            <a-entity camera look-controls position="0 1.6 0"></a-entity>
+
+            <!-- Oyin muhitining qurilishi -->
+            <a-sky src="https://cdn.aframe.io/360-image-gallery-boilerplate/img/sechelt.jpg"></a-sky>
+            
+            <!-- Qavatlar -->
+            <a-cylinder class="ground" position="2 0.75 -3" radius="0.5" height="1.5" color="brown"></a-cylinder>
+            <a-cylinder class="ground" position="-2 0.75 -3" radius="0.5" height="1.5" color="brown"></a-cylinder>
+            
+            <!-- Tangalar -->
+            <a-entity id="coins" position="0 1.6 -5">
+              <a-cylinder class="coin" radius="0.2" height="0.1" color="gold"></a-cylinder>
+              <a-cylinder class="coin" radius="0.2" height="0.1" color="gold" position="0.4 0 0"></a-cylinder>
+              <a-cylinder class="coin" radius="0.2" height="0.1" color="gold" position="-0.4 0 0"></a-cylinder>
+            </a-entity>
+            
+            <!-- Oyinchi (odam) qo'shish -->
+            <a-entity id="player" position="0 1.6 -3" cursor="rayOrigin: mouse" raycaster="objects: .ground"></a-entity>
+          </a-scene>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JavaScript va jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <!-- JavaScript kodlari -->
+  <script>
+    // Oyinchi (odam) qo'shish funksiyasi
+    function addPlayer() {
+      var scene = document.querySelector('a-scene');
+      var player = document.createElement('a-entity');
+      player.setAttribute('id', 'player');
+      player.setAttribute('position', '0 1.6 -3');
+      player.setAttribute('cursor', 'rayOrigin: mouse');
+      player.setAttribute('raycaster', 'objects: .ground');
+      scene.appendChild(player);
+    }
+
+    // Oyinchi (odam) harakatlari
+    function movePlayer(direction) {
+      var player = document.querySelector('#player');
+      var currentPosition = player.getAttribute('position');
+      switch(direction) {
+        case 'forward':
+          player.setAttribute('position', {x: currentPosition.x, y: currentPosition.y, z: currentPosition.z - 0.1});
+          break;
+        case 'backward':
+          player.setAttribute('position', {x: currentPosition.x, y: currentPosition.y, z: currentPosition.z + 0.1});
+          break;
+        case 'left':
+          player.setAttribute('position', {x: currentPosition.x - 0.1, y: currentPosition.y, z: currentPosition.z});
+          break;
+        case 'right':
+          player.setAttribute('position', {x: currentPosition.x + 0.1, y: currentPosition.y, z: currentPosition.z});
+          break;
+      }
+    }
+
